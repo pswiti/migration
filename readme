@@ -1,0 +1,11 @@
+brew install mysql
+brew services start mysql
+mysql --version
+mysql_secure_installation
+mysql -u root -p
+
+
+CREATE USER 'cdruser'@'localhost' IDENTIFIED BY 'Cdrpass@1234';
+GRANT ALL PRIVILEGES ON adf_test_db.* TO 'cdruser'@'localhost';
+FLUSH PRIVILEGES;
+
