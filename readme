@@ -9,3 +9,25 @@ CREATE USER 'cdruser'@'localhost' IDENTIFIED BY 'Cdrpass@1234';
 GRANT ALL PRIVILEGES ON adf_test_db.* TO 'cdruser'@'localhost';
 FLUSH PRIVILEGES;
 
+
+-- Connect to cdrdb
+\c cdrdb
+
+CREATE TABLE cdrs (
+    cdr_id SERIAL PRIMARY KEY,
+    call_date DATE,
+    caller VARCHAR(20),
+    callee VARCHAR(20),
+    duration_seconds INT,
+    billed_amount DECIMAL(10,2),
+    rate_plan_id INT
+);
+
+
+
+INSERT INTO cdrs (call_date, caller, callee, duration_seconds, billed_amount, rate_plan_id)
+VALUES 
+('2025-06-24', '1234567890', '0987654321', 180, 0.50, 1),
+('2025-06-24', '1234567891', '0987654322', 60, 0.20, 2),
+('2025-06-24', '1234567892', '0987654323', 300, 0.90, 1),
+('2025-06-24', '1234567893', '0987654324', 120, 0.40, 3);
