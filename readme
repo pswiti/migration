@@ -31,3 +31,66 @@ VALUES
 ('2025-06-24', '1234567891', '0987654322', 60, 0.20, 2),
 ('2025-06-24', '1234567892', '0987654323', 300, 0.90, 1),
 ('2025-06-24', '1234567893', '0987654324', 120, 0.40, 3);
+
+
+
+
+
+
+############################
+PROVIDER A
+CREATE TABLE cdrs_provider_a (
+    cdr_id SERIAL PRIMARY KEY,
+    call_date DATE,
+    caller VARCHAR(20),
+    callee VARCHAR(20),
+    duration_seconds INT,
+    billed_amount DECIMAL(10,2),
+    rate_plan_id INT,
+    provider_name VARCHAR(50)
+);
+
+sample:
+
+INSERT INTO cdrs_provider_a (call_date, caller, callee, duration_seconds, billed_amount, rate_plan_id, provider_name)
+VALUES 
+('2025-06-24', '1234567890', '0987654321', 180, 0.50, 1, 'Provider A'),
+('2025-06-24', '1234567891', '0987654322', 60, 0.20, 2, 'Provider A'),
+('2025-06-24', '1234567892', '0987654323', 300, 0.90, 1, 'Provider A'),
+('2025-06-24', '1234567893', '0987654324', 120, 0.40, 3, 'Provider A');
+
+Provider B
+CREATE TABLE cdrs_provider_b (
+    cdr_id INT PRIMARY KEY,
+    call_date DATE,
+    duration_seconds INT,
+    expected_amount DECIMAL(10,2),
+    rate_plan_id INT,
+    provider_name VARCHAR(50)
+);
+
+sample
+INSERT INTO cdrs_provider_b (cdr_id, call_date, duration_seconds, expected_amount, rate_plan_id, provider_name)
+VALUES 
+(1, '2025-06-24', 180, 0.50, 1, 'Provider B'),
+(2, '2025-06-24', 60, 0.25, 2, 'Provider B'),   -- Dispute: amount mismatch
+(3, '2025-06-24', 300, 0.90, 1, 'Provider B'),
+(4, '2025-06-24', 120, 0.45, 3, 'Provider B');  -- Dispute: amount mismatch
+
+dispute-query
+SELECT 
+    a.cdr_id,
+    a.call_date,
+    a.caller,
+    a.callee,
+    a.duration_seconds,
+    a.billed_amount,
+    b.expected_amount,
+    CASE 
+        WHEN a.billed_amount != b.expected_amount THEN 'Dispute'
+        ELSE 'Match'
+    END AS status
+FROM cdrs_provider_a a
+JOIN cdrs_provider_b b ON a.cdr_id = b.cdr_id;
+
+
