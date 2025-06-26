@@ -46,6 +46,10 @@ vishal@vishals-Laptop ~ % pwd
 /Users/vishal
 
 
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/local/mysql/bin/mysqld
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /usr/local/mysql/bin/mysqld
+
+
 ############################
 PROVIDER A
 CREATE TABLE cdrs_provider_a (
