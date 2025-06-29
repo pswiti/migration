@@ -4,6 +4,12 @@ mysql --version
 mysql_secure_installation
 mysql -u root -p
 
+to connect nest time to take data from mysql:
+cat /opt/homebrew/etc/my.cnf 
+brew services restart mysql
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
+
+
 
 CREATE USER 'cdruser'@'localhost' IDENTIFIED BY 'Cdrpass@1234';
 GRANT ALL PRIVILEGES ON adf_test_db.* TO 'cdruser'@'localhost';
